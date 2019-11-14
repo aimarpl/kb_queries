@@ -1,0 +1,119 @@
+{
+  "version": true,
+  "size": 500,
+  "sort": [
+    {
+      "@timestamp": {
+        "order": "desc",
+        "unmapped_type": "boolean"
+      }
+    }
+  ],
+  "_source": {
+    "excludes": []
+  },
+  "aggs": {
+    "2": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "fixed_interval": "30m",
+        "time_zone": "Europe/Warsaw",
+        "min_doc_count": 1
+      }
+    }
+  },
+  "stored_fields": [
+    "*"
+  ],
+  "script_fields": {},
+  "docvalue_fields": [
+    {
+      "field": "@timestamp",
+      "format": "date_time"
+    },
+    {
+      "field": "event.created",
+      "format": "date_time"
+    },
+    {
+      "field": "event.end",
+      "format": "date_time"
+    },
+    {
+      "field": "event.start",
+      "format": "date_time"
+    },
+    {
+      "field": "file.ctime",
+      "format": "date_time"
+    },
+    {
+      "field": "file.mtime",
+      "format": "date_time"
+    },
+    {
+      "field": "process.start",
+      "format": "date_time"
+    }
+  ],
+  "query": {
+    "bool": {
+      "must": [],
+      "filter": [
+        {
+          "bool": {
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "match": {
+                        "winlog.event_id": 1
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              },
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "match": {
+                        "winlog.computer_name": "XXXXXXXX"
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "format": "strict_date_optional_time",
+              "gte": "2019-11-13T09:11:13.767Z",
+              "lte": "2019-11-14T09:11:13.767Z"
+            }
+          }
+        }
+      ],
+      "should": [],
+      "must_not": []
+    }
+  },
+  "highlight": {
+    "pre_tags": [
+      "@kibana-highlighted-field@"
+    ],
+    "post_tags": [
+      "@/kibana-highlighted-field@"
+    ],
+    "fields": {
+      "*": {}
+    },
+    "fragment_size": 2147483647
+  }
+}
